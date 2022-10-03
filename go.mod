@@ -1,4 +1,4 @@
-module jquants-api-go
+module github.com/hellonico/jquants-api-go
 
 go 1.18
 
