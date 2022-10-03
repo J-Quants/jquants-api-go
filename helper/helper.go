@@ -2,7 +2,11 @@ package helper
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
+	"net/http"
+	"olympos.io/encoding/edn"
+	"os"
 	"time"
 )
 
@@ -63,4 +67,43 @@ func Check(e error) {
 	if e != nil {
 		panic(e)
 	}
+}
+
+func Daily(code string, date string, from string, to string) DailyQuotes {
+
+	homeDir, err := os.UserHomeDir()
+	configDir := homeDir + "/.config/jquants/"
+	s, _ := os.ReadFile(configDir + "login.edn")
+	//fmt.Printf("%s\n", s)
+	var user Login
+	edn.Unmarshal(s, &user)
+	//fmt.Printf("%s\n", user)
+
+	s2, _ := os.ReadFile(configDir + "id_token.edn")
+	var idtoken IdToken
+	edn.Unmarshal(s2, &idtoken)
+	//fmt.Printf("%s\n", idtoken.IdToken)
+
+	baseUrl := fmt.Sprintf("https://api.jpx-jquants.com/v1/prices/daily_quotes?code=%s", code)
+	var url string
+	if from != "" && to != "" {
+		url = fmt.Sprintf("%s&from=%s&to=%s", baseUrl, from, to)
+	} else {
+		url = fmt.Sprintf("%s&date=%s", baseUrl, date)
+	}
+	fmt.Printf("URL: %s\n", url)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	Check(err)
+
+	req.Header = http.Header{
+		"Authorization": {"Bearer " + idtoken.IdToken},
+	}
+
+	client := http.Client{}
+	res, _ := client.Do(req)
+
+	var quotes DailyQuotes
+	err_ := json.NewDecoder(res.Body).Decode(&quotes)
+	Check(err_)
+	return quotes
 }
