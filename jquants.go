@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/hellonico/helper"
 )
 
 func main() {
@@ -20,7 +19,7 @@ func main() {
 	//	os.Exit(0)
 	//}
 
-	var quotes = helper.Daily(*code, *date, *from, *to)
+	var quotes = jquants.Daily(*code, *date, *from, *to)
 	fmt.Printf("[%d] Daily Quotes for %s \n", len(quotes.DailyQuotes), *code)
 	for _, quote := range quotes.DailyQuotes {
 		fmt.Printf("%s,%f\n", quote.Date, quote.Close)
