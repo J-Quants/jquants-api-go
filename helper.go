@@ -123,6 +123,13 @@ func ReadRefreshToken() RefreshToken {
 	return refreshToken
 }
 
+func ReadIdToken() IdToken {
+	var idToken IdToken
+	s := readConfigFile(ID_TOKEN_FILE)
+	edn.Unmarshal(s, &idToken)
+	return idToken
+}
+
 func PrepareLogin(username string, password string) {
 	var user = Login{username, password}
 	encoded, _ := edn.Marshal(&user)
@@ -171,7 +178,7 @@ func GetIdToken() (IdToken, error) {
 }
 
 func Daily(code string, date string, from string, to string) DailyQuotes {
-	idtoken, _ := GetIdToken()
+	idtoken := ReadIdToken()
 
 	baseUrl := fmt.Sprintf("%s/prices/daily_quotes?code=%s", BASE_URL, code)
 	var url string

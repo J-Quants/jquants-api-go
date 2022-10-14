@@ -1,4 +1,4 @@
-github.com/hellonico/jquants-api-go v0.1.0 h1:v8SRehIQp+hWSJmMzvXkBDpHk6fAxTXTjABaRLBVo/c=
-github.com/hellonico/jquants-api-go v0.1.0/go.mod h1:/MTJsXmMNaNbzzwZtvC1G4PdNHZfSOxGzPRnVe1Sqro=
-github.com/hellonico/jquants-api-go v0.2.0 h1:NaMHKD2172QRDOXEx/v9gYUIwNkQGG7Pcu8voHAC5Cg=
-github.com/hellonico/jquants-api-go v0.2.0/go.mod h1:wonKmzGR7pmys/i3BrY7+OyXC01N/rXgvSeZGoSpWKA=
+github.com/hellonico/jquants-api-go v0.3.0 h1:m3Fe1IOS6JdAu6g8oxb36o5NPhITh5PCszc829ikbwk=
+github.com/hellonico/jquants-api-go v0.3.0/go.mod h1:wonKmzGR7pmys/i3BrY7+OyXC01N/rXgvSeZGoSpWKA=
+olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3 h1:slmdOY3vp8a7KQbHkL+FLbvbkgMqmXojpFUO/jENuqQ=
+olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3/go.mod h1:oVgVk4OWVDi43qWBEyGhXgYxt7+ED4iYNpTngSLX2Iw=
