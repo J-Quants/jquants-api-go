@@ -1,6 +1,6 @@
 module jquants-example
 
-require github.com/hellonico/jquants-api-go v0.5.0
+require github.com/hellonico/jquants-api-go v0.6.0
 
 require olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3 // indirect
 
