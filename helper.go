@@ -7,12 +7,20 @@ import (
 	"net/http"
 	"olympos.io/encoding/edn"
 	"os"
+	"strings"
 	"time"
 )
 
+const BASE_URL = "https://api.jpx-jquants.com/v1"
+const REFRESH_TOKEN_FILE = "refresh_token.edn"
+const ID_TOKEN_FILE = "id_token.edn"
+
 type Login struct {
-	UserName string `edn:"mailaddress"`
-	Password string `edn:"password"`
+	UserName string `edn:"mailaddress" json:"mailaddress"`
+	Password string `edn:"password" json:"password"`
+}
+type RefreshToken struct {
+	RefreshToken string `edn:"refreshToken" json:"refreshToken"`
 }
 type IdToken struct {
 	IdToken string `edn:"idToken"`
@@ -69,38 +77,110 @@ func Check(e error) {
 	}
 }
 
-func Daily(code string, date string, from string, to string) DailyQuotes {
+func sendRequest(url string, idToken string) *http.Response {
 
-	homeDir, err := os.UserHomeDir()
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	Check(err)
+
+	req.Header = http.Header{
+		"Authorization": {"Bearer " + idToken},
+	}
+
+	client := http.Client{}
+	res, _ := client.Do(req)
+	return res
+}
+
+/**
+PRIVATE METHODS TO READ / WRITE CONFIG FILES
+*/
+func getConfigDir() string {
+	homeDir, _ := os.UserHomeDir()
 	configDir := homeDir + "/.config/jquants/"
-	s, _ := os.ReadFile(configDir + "login.edn")
-	//fmt.Printf("%s\n", s)
+	return configDir
+}
+func readConfigFile(file string) []byte {
+	s, _ := os.ReadFile(getConfigDir() + file)
+	return s
+}
+func writeConfigFile(file string, content []byte) {
+	os.WriteFile(getConfigFile(file), content, 0664)
+}
+func getConfigFile(file string) string {
+	return fmt.Sprintf("%s/%s", getConfigDir(), file)
+}
+
+func GetUser() Login {
+	s, _ := os.ReadFile(getConfigFile("login.edn"))
 	var user Login
 	edn.Unmarshal(s, &user)
-	//fmt.Printf("%s\n", user)
+	return user
+}
+func ReadRefreshToken() RefreshToken {
+	var refreshToken RefreshToken
+	s := readConfigFile(REFRESH_TOKEN_FILE)
+	edn.Unmarshal(s, &refreshToken)
+	return refreshToken
+}
 
-	s2, _ := os.ReadFile(configDir + "id_token.edn")
-	var idtoken IdToken
-	edn.Unmarshal(s2, &idtoken)
-	//fmt.Printf("%s\n", idtoken.IdToken)
+func PrepareLogin(username string, password string) {
+	var user = Login{username, password}
+	encoded, _ := edn.Marshal(&user)
+	writeConfigFile("login.edn", encoded)
+}
 
-	baseUrl := fmt.Sprintf("https://api.jpx-jquants.com/v1/prices/daily_quotes?code=%s", code)
+func GetRefreshToken() (RefreshToken, error) {
+	var user = GetUser()
+	url := fmt.Sprintf("%s/token/auth_user", BASE_URL)
+	fmt.Printf("%s", url)
+
+	data, err := json.MarshalIndent(user, "", strings.Repeat(" ", 2))
+	// https://golang.cafe/blog/golang-convert-byte-slice-to-io-reader.html
+
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
+
+	// fmt.Println(req)
+	client := http.Client{}
+	res, err := client.Do(req)
+
+	var rt RefreshToken
+	json.NewDecoder(res.Body).Decode(&rt)
+
+	encoded, err := edn.Marshal(&rt)
+	writeConfigFile(REFRESH_TOKEN_FILE, encoded)
+
+	return rt, err
+}
+
+func GetIdToken() (IdToken, error) {
+	var token, _ = GetRefreshToken()
+
+	url := fmt.Sprintf("%s/token/auth_refresh?refreshtoken=%s", BASE_URL, token.RefreshToken)
+
+	req, err := http.NewRequest(http.MethodPost, url, nil)
+	client := http.Client{}
+	res, err := client.Do(req)
+
+	var rt IdToken
+	json.NewDecoder(res.Body).Decode(&rt)
+
+	encoded, err := edn.Marshal(&rt)
+	writeConfigFile(ID_TOKEN_FILE, encoded)
+
+	return rt, err
+}
+
+func Daily(code string, date string, from string, to string) DailyQuotes {
+	idtoken, _ := GetIdToken()
+
+	baseUrl := fmt.Sprintf("%s/prices/daily_quotes?code=%s", BASE_URL, code)
 	var url string
 	if from != "" && to != "" {
 		url = fmt.Sprintf("%s&from=%s&to=%s", baseUrl, from, to)
 	} else {
 		url = fmt.Sprintf("%s&date=%s", baseUrl, date)
 	}
-	fmt.Printf("URL: %s\n", url)
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	Check(err)
-
-	req.Header = http.Header{
-		"Authorization": {"Bearer " + idtoken.IdToken},
-	}
-
-	client := http.Client{}
-	res, _ := client.Do(req)
+	res := sendRequest(url, idtoken.IdToken)
 
 	var quotes DailyQuotes
 	err_ := json.NewDecoder(res.Body).Decode(&quotes)

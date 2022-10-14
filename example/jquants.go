@@ -10,7 +10,7 @@ func main() {
 	code := flag.String("code", "86970", "Company Code")
 	date := flag.String("date", "20220930", "Date of the quote")
 	from := flag.String("from", "20220930", "Start Date for date range")
-	to := flag.String("to", "20220930", "End Date for date range")
+	to := flag.String("to", "20221003", "End Date for date range")
 	flag.Parse()
 
 	fmt.Printf("Code: %s and Date: %s\n", *code, *date)
