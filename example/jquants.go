@@ -13,21 +13,21 @@ func main() {
 
 	code := flag.String("code", "86970", "Company Code")
 	date := flag.String("date", "20220930", "Date of the quote")
-	from := flag.String("from", "20220930", "Start Date for date range")
-	to := flag.String("to", "20221003", "End Date for date range")
+	from := flag.String("from", "", "Start Date for date range")
+	to := flag.String("to", "", "End Date for date range")
 
 	flag.Parse()
 
-	fmt.Printf("Code: %s and Date: %s\n", *code, *date)
+	fmt.Printf("Code: %s and Date: %s [From: %s To: %s]\n", *code, *date, *from, *to)
 	//if flag.NArg() != 0 {
 	//	fmt.Fprintf(os.Stderr, "Usage of jquants:\n")
 	//	flag.PrintDefaults()
 	//	os.Exit(0)
 	//}
-	if (*refreshToken) {
+	if *refreshToken {
 		jquants.GetRefreshToken()
 	}
-	if (*refreshId) {
+	if *refreshId {
 		jquants.GetIdToken()
 	}
 
