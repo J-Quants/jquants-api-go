@@ -1,3 +1,3 @@
 module jquants-example
-require olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3
+require github.com/hellonico/jquants-api-go v0.1.0
 go 1.17
