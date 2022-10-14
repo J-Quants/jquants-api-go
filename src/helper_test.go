@@ -1,4 +1,4 @@
-package jquants_api_go
+package src
 
 import (
 	"fmt"

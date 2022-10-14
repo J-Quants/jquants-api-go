@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	jquants "github.com/hellonico/jquants-api-go"
+	jquants "github.com/hellonico/jquantsg-api-go"
 )
 
 func main() {
