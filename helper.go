@@ -139,7 +139,7 @@ func PrepareLogin(username string, password string) {
 func GetRefreshToken() (RefreshToken, error) {
 	var user = GetUser()
 	url := fmt.Sprintf("%s/token/auth_user", BASE_URL)
-	fmt.Printf("%s", url)
+	// fmt.Printf("%s", url)
 
 	data, err := json.MarshalIndent(user, "", strings.Repeat(" ", 2))
 	// https://golang.cafe/blog/golang-convert-byte-slice-to-io-reader.html
