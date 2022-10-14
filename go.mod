@@ -1,4 +1,4 @@
-module github.com/hellonico/jquants-api-go
+module github.com/hellonico/jquants-api
 
 go 1.17
 
