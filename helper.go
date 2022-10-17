@@ -97,7 +97,7 @@ func getConfigDir() string {
 	homeDir, _ := os.UserHomeDir()
 	configDir := homeDir + "/.config/jquants/"
 	os.MkdirAll(configDir, os.ModePerm)
-	return configDirg
+	return configDir
 }
 func readConfigFile(file string) []byte {
 	s, _ := os.ReadFile(getConfigDir() + file)
