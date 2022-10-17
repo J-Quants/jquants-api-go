@@ -9,11 +9,11 @@ jobs:
       - restore_cache:
           keys:
             - go-mod-v4-{{ checksum "go.sum" }}
-            - run:
-                name: Install Dependencies
-                command: go get ./...
-            - save_cache:
-                key: go-mod-v4-{{ checksum "go.sum" }}
-                paths:
-                  - "/go/pkg/mod"
+      - run:
+          name: Install Dependencies
+          command: go get ./...
+      - save_cache:
+          key: go-mod-v4-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
       - run: export USERNAME=$JQUANTS_USER && export PASSWORD=$JQUANTS_PWD && go test -v
