@@ -96,7 +96,8 @@ PRIVATE METHODS TO READ / WRITE CONFIG FILES
 func getConfigDir() string {
 	homeDir, _ := os.UserHomeDir()
 	configDir := homeDir + "/.config/jquants/"
-	return configDir
+	os.MkdirAll(configDir, os.ModePerm)
+	return configDirg
 }
 func readConfigFile(file string) []byte {
 	s, _ := os.ReadFile(getConfigDir() + file)
