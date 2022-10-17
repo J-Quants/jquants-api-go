@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"olympos.io/encoding/edn"
 	"os"
-	"strings"
 	"time"
 )
 
@@ -23,7 +22,7 @@ type RefreshToken struct {
 	RefreshToken string `edn:"refreshToken" json:"refreshToken"`
 }
 type IdToken struct {
-	IdToken string `edn:"idToken"`
+	IdToken string `edn:"idToken" json:"idToken"`
 }
 
 type JSONTime int64
@@ -141,7 +140,7 @@ func GetRefreshToken() (RefreshToken, error) {
 	url := fmt.Sprintf("%s/token/auth_user", BASE_URL)
 	// fmt.Printf("%s", url)
 
-	data, err := json.MarshalIndent(user, "", strings.Repeat(" ", 2))
+	data, err := json.Marshal(user)
 	// https://golang.cafe/blog/golang-convert-byte-slice-to-io-reader.html
 
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
@@ -160,7 +159,7 @@ func GetRefreshToken() (RefreshToken, error) {
 }
 
 func GetIdToken() (IdToken, error) {
-	var token, _ = GetRefreshToken()
+	var token = ReadRefreshToken()
 
 	url := fmt.Sprintf("%s/token/auth_refresh?refreshtoken=%s", BASE_URL, token.RefreshToken)
 
