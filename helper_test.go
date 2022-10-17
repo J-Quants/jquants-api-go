@@ -7,7 +7,6 @@ import (
 )
 
 func TestPrepareLogin(t *testing.T) {
-	fmt.Printf("User: %s\n", os.Getenv("USERNAME"))
 	PrepareLogin(os.Getenv("USERNAME"), os.Getenv("PASSWORD"))
 	fmt.Printf("Loaded User: %s\n", GetUser().UserName)
 }
