@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: cimg/go:1.17
+      - image: cimg/go:1.17.9
     steps:
       - checkout
       - restore_cache:
@@ -16,4 +16,4 @@ jobs:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
-      - run: export USERNAME=$JQUANTS_USER && export PASSWORD=$JQUANTS_PWD && go test -v
+      - run: go test -v
