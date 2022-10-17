@@ -6,6 +6,4 @@ jobs:
       - image: cimg/go:1.17
     steps:
       - checkout
-      - run:
-          name: Run tests
-          command: go test -v
+      - run: export USERNAME=$JQUANTS_USER && export PASSWORD=$JQUANTS_PWD && go test -v
