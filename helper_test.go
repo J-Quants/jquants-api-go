@@ -7,8 +7,9 @@ import (
 )
 
 func TestPrepareLogin(t *testing.T) {
+	fmt.Printf("User: %s\n", os.Getenv("USERNAME"))
 	PrepareLogin(os.Getenv("USERNAME"), os.Getenv("PASSWORD"))
-	fmt.Printf("Found: %s", GetUser().UserName)
+	fmt.Printf("Loaded User: %s\n", GetUser().UserName)
 }
 func TestRefreshToken(t *testing.T) {
 	token, _ := GetRefreshToken()
