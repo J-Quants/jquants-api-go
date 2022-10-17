@@ -7,7 +7,7 @@ import (
 )
 
 func TestPrepareLogin(t *testing.T) {
-	PrepareLogin(os.Getenv("USERNAME"), os.Getenv("PASSWORD"))
+	PrepareLogin(os.Getenv("JQUANTS_USER"), os.Getenv("JQUANTS_PWD"))
 }
 func TestRefreshToken(t *testing.T) {
 	token, _ := GetRefreshToken()
