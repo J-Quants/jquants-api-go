@@ -12,4 +12,5 @@ go test
 
 Warning! This will populate and override your local jquants configuration.
 
+Related Article on how this Wrapper was written and how to use is [here](https://dzone.com/articles/writing-an-api-wrapper-in-golang).
 
