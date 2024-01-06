@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const BASE_URL = "https://api.jpx-jquants.com/v1"
+const BASE_URL = "https://api.jquants.com/v1"
 const REFRESH_TOKEN_FILE = "refresh_token.edn"
 const ID_TOKEN_FILE = "id_token.edn"
 
